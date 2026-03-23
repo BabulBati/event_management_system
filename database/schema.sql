@@ -1,0 +1,104 @@
+-- ============================================
+-- EVENT MANAGEMENT SYSTEM - DATABASE SCHEMA
+-- ============================================
+-- Database: event_management_system
+-- Normalized to Third Normal Form (3NF) as per NFR-014
+-- ============================================
+
+-- TODO: Create the database
+-- - CREATE DATABASE event_management_system;
+-- - USE event_management_system;
+
+-- ============================================
+-- TABLE: users
+-- Purpose: Stores all registered user accounts
+-- ============================================
+-- TODO: Create 'users' table with the following columns:
+-- - id              : INT, PRIMARY KEY, AUTO_INCREMENT
+-- - name            : VARCHAR(100), NOT NULL
+-- - email           : VARCHAR(150), NOT NULL, UNIQUE
+-- - password         : VARCHAR(255), NOT NULL (stores bcrypt hash as per NFR-003)
+-- - phone           : VARCHAR(20), NOT NULL
+-- - role            : ENUM('admin', 'organizer', 'attendee'), NOT NULL, DEFAULT 'attendee'
+-- - status          : ENUM('active', 'inactive'), NOT NULL, DEFAULT 'active'
+-- - created_at      : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP
+-- - updated_at      : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+--
+-- INDEXES: Index on email for login queries, index on role for filtering
+
+-- ============================================
+-- TABLE: categories
+-- Purpose: Stores event categories for filtering (FR-009)
+-- ============================================
+-- TODO: Create 'categories' table with the following columns:
+-- - id              : INT, PRIMARY KEY, AUTO_INCREMENT
+-- - name            : VARCHAR(50), NOT NULL, UNIQUE (e.g., Workshop, Seminar, Concert, Sports, Cultural)
+-- - description     : TEXT, NULLABLE
+-- - created_at      : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP
+--
+-- TODO: Insert default categories: Workshop, Seminar, Concert, Sports, Cultural
+
+-- ============================================
+-- TABLE: events
+-- Purpose: Stores all event details created by organizers
+-- ============================================
+-- TODO: Create 'events' table with the following columns:
+-- - id              : INT, PRIMARY KEY, AUTO_INCREMENT
+-- - organizer_id    : INT, NOT NULL, FOREIGN KEY -> users(id) ON DELETE CASCADE
+-- - title           : VARCHAR(200), NOT NULL
+-- - description     : TEXT, NOT NULL
+-- - category_id     : INT, NOT NULL, FOREIGN KEY -> categories(id)
+-- - event_date      : DATE, NOT NULL
+-- - event_time      : TIME, NOT NULL
+-- - venue           : VARCHAR(200), NOT NULL
+-- - capacity        : INT, NOT NULL (maximum seats)
+-- - available_seats : INT, NOT NULL (decreases on booking, increases on cancellation)
+-- - image           : VARCHAR(255), NULLABLE (filename of uploaded cover image)
+-- - status          : ENUM('pending', 'approved', 'rejected', 'cancelled'), DEFAULT 'pending'
+-- - created_at      : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP
+-- - updated_at      : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+--
+-- INDEXES: Index on event_date, index on category_id, index on status
+-- NOTE: available_seats should be initialized to capacity value when event is created
+
+-- ============================================
+-- TABLE: bookings
+-- Purpose: Stores event bookings made by attendees (FR-012 to FR-017)
+-- ============================================
+-- TODO: Create 'bookings' table with the following columns:
+-- - id              : INT, PRIMARY KEY, AUTO_INCREMENT
+-- - event_id        : INT, NOT NULL, FOREIGN KEY -> events(id) ON DELETE CASCADE
+-- - attendee_id     : INT, NOT NULL, FOREIGN KEY -> users(id) ON DELETE CASCADE
+-- - booking_date    : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP
+-- - status          : ENUM('confirmed', 'cancelled'), NOT NULL, DEFAULT 'confirmed'
+--
+-- UNIQUE CONSTRAINT: (event_id, attendee_id) to prevent duplicate bookings (FR-016)
+-- INDEXES: Index on event_id, index on attendee_id, index on status
+
+-- ============================================
+-- TABLE: reviews
+-- Purpose: Stores attendee feedback and ratings for events (FR-021)
+-- ============================================
+-- TODO: Create 'reviews' table with the following columns:
+-- - id              : INT, PRIMARY KEY, AUTO_INCREMENT
+-- - event_id        : INT, NOT NULL, FOREIGN KEY -> events(id) ON DELETE CASCADE
+-- - attendee_id     : INT, NOT NULL, FOREIGN KEY -> users(id) ON DELETE CASCADE
+-- - rating          : TINYINT, NOT NULL, CHECK (rating BETWEEN 1 AND 5)
+-- - comment         : TEXT, NULLABLE
+-- - created_at      : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP
+--
+-- UNIQUE CONSTRAINT: (event_id, attendee_id) so one review per attendee per event
+-- INDEXES: Index on event_id for fetching event reviews
+
+-- ============================================
+-- TABLE: password_resets
+-- Purpose: Stores temporary tokens for password reset flow (FR-005)
+-- ============================================
+-- TODO: Create 'password_resets' table with the following columns:
+-- - id              : INT, PRIMARY KEY, AUTO_INCREMENT
+-- - user_id         : INT, NOT NULL, FOREIGN KEY -> users(id) ON DELETE CASCADE
+-- - token           : VARCHAR(255), NOT NULL, UNIQUE
+-- - expires_at      : DATETIME, NOT NULL (set to 1 hour from creation)
+-- - created_at      : TIMESTAMP, DEFAULT CURRENT_TIMESTAMP
+--
+-- NOTE: Delete expired tokens periodically or on each password reset request

@@ -1,0 +1,63 @@
+/**
+ * CUSTOM STYLESHEET
+ * ===================
+ * Custom styles to complement Bootstrap 5.
+ * Bootstrap 5 handles most of the layout and components.
+ * This file is for project-specific customizations only.
+ *
+ * TODO - Sections to style:
+ *
+ * 1. GLOBAL STYLES
+ *    - Custom color variables (CSS custom properties) for brand colors
+ *    - Body font-family override if needed
+ *    - Custom link colors and hover states
+ *
+ * 2. NAVBAR CUSTOMIZATION
+ *    - Brand logo sizing
+ *    - Active link highlight style
+ *    - Navbar background color override
+ *
+ * 3. HERO SECTION (Homepage)
+ *    - Full-width background image or gradient
+ *    - Overlay text styling
+ *    - CTA button styling
+ *
+ * 4. EVENT CARDS
+ *    - Card hover effect (shadow, scale)
+ *    - Image aspect ratio (maintain 16:9 or similar)
+ *    - Category badge positioning on card
+ *    - "Sold Out" overlay styling
+ *
+ * 5. DASHBOARD LAYOUTS
+ *    - Sidebar + main content layout (flexbox or grid)
+ *    - Sidebar width and responsive behavior
+ *    - Stats card styling (icons, colors)
+ *
+ * 6. FORMS
+ *    - Form card container styling
+ *    - Input focus states
+ *    - Error message styling (red text below inputs)
+ *    - Success message styling (green alert)
+ *
+ * 7. STAR RATING (Review)
+ *    - Star icon sizing and colors (gold filled, grey empty)
+ *    - Hover effect for interactive star selection
+ *
+ * 8. FOOTER
+ *    - Footer background, text color, link styles
+ *    - Footer layout (columns for links)
+ *
+ * 9. PAGINATION
+ *    - Active page highlight
+ *    - Custom pagination colors if needed
+ *
+ * 10. RESPONSIVE OVERRIDES (NFR-008)
+ *     - Media queries for 320px - 1920px range
+ *     - Mobile-specific adjustments beyond Bootstrap defaults
+ *     - Sidebar collapse behavior on mobile
+ *
+ * 11. UTILITY CLASSES
+ *     - .text-truncate-2 (truncate text to 2 lines for card descriptions)
+ *     - .status-badge variants
+ *     - .avatar (user profile icon)
+ */
